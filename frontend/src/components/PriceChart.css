@@ -1,0 +1,100 @@
+.price-chart {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin: 30px 0;
+}
+
+.price-chart.loading,
+.price-chart.error,
+.price-chart.no-data {
+  padding: 60px;
+  text-align: center;
+  color: #666;
+}
+
+.chart-header {
+  margin-bottom: 30px;
+}
+
+.chart-header h3 {
+  margin: 0 0 20px 0;
+  font-size: 24px;
+  color: #333;
+  font-weight: 600;
+}
+
+.chart-stats {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.stat .label {
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.stat .value {
+  color: #333;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.stat .value.green {
+  color: #27ae60;
+}
+
+.stat .value.red {
+  color: #e74c3c;
+}
+
+/* Custom tooltip styling */
+.custom-tooltip {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border: 2px solid #3498db;
+}
+
+.custom-tooltip .time {
+  margin: 0 0 8px 0;
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.custom-tooltip .price {
+  margin: 0;
+  color: #3498db;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .price-chart {
+    padding: 20px 15px;
+  }
+
+  .chart-header h3 {
+    font-size: 20px;
+  }
+
+  .chart-stats {
+    gap: 15px;
+  }
+
+  .stat .value {
+    font-size: 16px;
+  }
+}

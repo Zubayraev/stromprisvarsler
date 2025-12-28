@@ -1,0 +1,142 @@
+.cheapest-hours {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin: 30px 0;
+}
+
+.cheapest-hours.loading,
+.cheapest-hours.error,
+.cheapest-hours.no-data {
+  padding: 60px;
+  text-align: center;
+  color: #666;
+}
+
+.section-header {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.section-header h3 {
+  margin: 0 0 10px 0;
+  font-size: 24px;
+  color: #333;
+  font-weight: 600;
+}
+
+.subtitle {
+  margin: 0;
+  color: #666;
+  font-size: 16px;
+}
+
+.hours-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin: 30px 0;
+}
+
+.hour-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 15px;
+  padding: 30px;
+  text-align: center;
+  color: white;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.hour-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.hour-card:nth-child(1) {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.hour-card:nth-child(2) {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.hour-card:nth-child(3) {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.card-rank {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.card-time {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.card-price {
+  margin: 20px 0;
+}
+
+.card-price .price-value {
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.card-price .price-unit {
+  font-size: 16px;
+  font-weight: 500;
+  margin-left: 5px;
+  opacity: 0.9;
+}
+
+.card-emoji {
+  font-size: 40px;
+  margin-top: 15px;
+}
+
+.tip-box {
+  background: #f8f9fa;
+  border-left: 4px solid #3498db;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 30px;
+}
+
+.tip-box p {
+  margin: 0;
+  color: #333;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cheapest-hours {
+    padding: 20px;
+  }
+
+  .hours-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .hour-card {
+    padding: 25px;
+  }
+
+  .card-price .price-value {
+    font-size: 36px;
+  }
+}
