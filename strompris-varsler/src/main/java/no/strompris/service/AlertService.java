@@ -18,15 +18,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-/**
- * AlertService - Business logic for varsler
- *
- * Håndterer:
- * - Opprettelse av varsler
- * - Sjekke om varsler skal sendes
- * - Generere varselmeldinger
- * - Hente varslingshistorikk
- */
 @Service
 @Transactional
 public class AlertService {
@@ -36,28 +27,23 @@ public class AlertService {
     private final AlertRepository alertRepository;
     private final UserService userService;
     private final PriceService priceService;
+    private final EmailService emailService;
 
     @Autowired
     public AlertService(AlertRepository alertRepository,
                         UserService userService,
-                        PriceService priceService) {
+                        PriceService priceService,
+                        EmailService emailService) {
         this.alertRepository = alertRepository;
         this.userService = userService;
         this.priceService = priceService;
+        this.emailService = emailService;
     }
 
     // ============================================
     // OPPRETTE VARSLER
     // ============================================
 
-    /**
-     * Opprett og lagre et nytt varsel
-     * @param user Bruker som skal motta varselet
-     * @param alertType Type varsel
-     * @param message Varselmeldingen
-     * @param price Prisen da varselet ble utløst (valgfritt)
-     * @return Lagret varsel
-     */
     public Alert createAlert(User user, AlertType alertType, String message, BigDecimal price) {
         logger.info("Oppretter varsel for bruker {}: {}", user.getEmail(), alertType);
 
@@ -65,9 +51,6 @@ public class AlertService {
         return alertRepository.save(alert);
     }
 
-    /**
-     * Opprett varsel uten pris
-     */
     public Alert createAlert(User user, AlertType alertType, String message) {
         return createAlert(user, alertType, message, null);
     }
@@ -76,10 +59,6 @@ public class AlertService {
     // LAV PRIS VARSLER
     // ============================================
 
-    /**
-     * Sjekk og send lav-pris varsler for alle zoner
-     * Kalles hver time av scheduled task
-     */
     public void checkAndSendLowPriceAlerts() {
         logger.info("Sjekker lav-pris varsler for alle zoner");
 
@@ -88,20 +67,15 @@ public class AlertService {
         }
     }
 
-    /**
-     * Sjekk og send lav-pris varsler for en spesifikk zone
-     */
     private void checkAndSendLowPriceAlertsForZone(no.strompris.model.PriceZone zone) {
         logger.debug("Sjekker lav-pris varsler for {}", zone);
 
-        // Hent nåværende pris
         PriceData currentPrice = priceService.getCurrentPrice(zone).orElse(null);
         if (currentPrice == null) {
             logger.warn("Ingen prisdata tilgjengelig for {}", zone);
             return;
         }
 
-        // Finn brukere som skal varsles
         List<User> usersToNotify = userService.getUsersForLowPriceAlert(
                 zone,
                 currentPrice.getPriceNok()
@@ -112,9 +86,7 @@ public class AlertService {
             return;
         }
 
-        // Send varsel til hver bruker
         for (User user : usersToNotify) {
-            // Sjekk om bruker allerede har fått dette varselet i dag
             if (hasReceivedAlertToday(user.getId(), AlertType.PRICE_LOW)) {
                 logger.debug("Bruker {} har allerede fått lav-pris varsel i dag", user.getEmail());
                 continue;
@@ -123,14 +95,18 @@ public class AlertService {
             String message = generateLowPriceMessage(currentPrice);
             createAlert(user, AlertType.PRICE_LOW, message, currentPrice.getPriceNok());
 
-            logger.info("Lav-pris varsel sendt til {}: {} kr/kWh",
+            // ✅ Send e-post
+            emailService.sendLowPriceAlert(
+                    user.getEmail(),
+                    currentPrice.getPriceNok().doubleValue(),
+                    zone.toString()
+            );
+
+            logger.info("✉️ Lav-pris varsel sendt til {}: {} kr/kWh",
                     user.getEmail(), currentPrice.getPriceNok());
         }
     }
 
-    /**
-     * Generer melding for lav-pris varsel
-     */
     private String generateLowPriceMessage(PriceData priceData) {
         return String.format(
                 "⚡ Lav strømpris nå! Kun %.2f kr/kWh i %s. Perfekt tid for strømkrevende oppgaver!",
@@ -143,9 +119,6 @@ public class AlertService {
     // HØY PRIS VARSLER
     // ============================================
 
-    /**
-     * Sjekk og send høy-pris varsler for alle zoner
-     */
     public void checkAndSendHighPriceAlerts() {
         logger.info("Sjekker høy-pris varsler for alle zoner");
 
@@ -154,9 +127,6 @@ public class AlertService {
         }
     }
 
-    /**
-     * Sjekk og send høy-pris varsler for en spesifikk zone
-     */
     private void checkAndSendHighPriceAlertsForZone(no.strompris.model.PriceZone zone) {
         logger.debug("Sjekker høy-pris varsler for {}", zone);
 
@@ -178,14 +148,18 @@ public class AlertService {
             String message = generateHighPriceMessage(currentPrice);
             createAlert(user, AlertType.PRICE_HIGH, message, currentPrice.getPriceNok());
 
-            logger.info("Høy-pris varsel sendt til {}: {} kr/kWh",
+            // ✅ Send e-post
+            emailService.sendHighPriceAlert(
+                    user.getEmail(),
+                    currentPrice.getPriceNok().doubleValue(),
+                    zone.toString()
+            );
+
+            logger.info("✉️ Høy-pris varsel sendt til {}: {} kr/kWh",
                     user.getEmail(), currentPrice.getPriceNok());
         }
     }
 
-    /**
-     * Generer melding for høy-pris varsel
-     */
     private String generateHighPriceMessage(PriceData priceData) {
         return String.format(
                 "⚠️ Høy strømpris nå! %.2f kr/kWh i %s. Utsett strømkrevende oppgaver hvis mulig.",
@@ -198,10 +172,6 @@ public class AlertService {
     // BILLIGSTE TIMER VARSLER
     // ============================================
 
-    /**
-     * Send daglig varsel om billigste timer
-     * Sendes én gang per dag (f.eks. kl 06:00)
-     */
     public void sendCheapestHoursAlerts() {
         logger.info("Sender varsler om billigste timer for i dag");
 
@@ -210,9 +180,6 @@ public class AlertService {
         }
     }
 
-    /**
-     * Send billigste-timer varsel for en zone
-     */
     private void sendCheapestHoursAlertsForZone(no.strompris.model.PriceZone zone) {
         List<User> users = userService.getUsersToNotifyInZone(zone);
         List<PriceData> cheapestHours = priceService.getCheapestHoursToday(zone, 3);
@@ -230,13 +197,13 @@ public class AlertService {
             String message = generateCheapestHoursMessage(zone, cheapestHours);
             createAlert(user, AlertType.CHEAPEST_HOURS, message);
 
-            logger.info("Billigste-timer varsel sendt til {}", user.getEmail());
+            // ✅ Send e-post med billigste timer
+            emailService.sendCheapestHoursAlert(user.getEmail(), zone.toString(), cheapestHours);
+
+            logger.info("✉️ Billigste-timer varsel sendt til {}", user.getEmail());
         }
     }
 
-    /**
-     * Generer melding for billigste-timer varsel
-     */
     private String generateCheapestHoursMessage(no.strompris.model.PriceZone zone,
                                                 List<PriceData> cheapestHours) {
         StringBuilder message = new StringBuilder();
@@ -261,10 +228,6 @@ public class AlertService {
     // DAGLIG SAMMENDRAG
     // ============================================
 
-    /**
-     * Send daglig sammendrag til alle brukere
-     * Sendes én gang per dag (f.eks. kl 18:00)
-     */
     public void sendDailySummaryAlerts() {
         logger.info("Sender daglig sammendrag til alle brukere");
 
@@ -273,15 +236,13 @@ public class AlertService {
         }
     }
 
-    /**
-     * Send daglig sammendrag for en zone
-     */
     private void sendDailySummaryAlertsForZone(no.strompris.model.PriceZone zone) {
         List<User> users = userService.getUsersToNotifyInZone(zone);
 
         BigDecimal avgPrice = priceService.getAveragePriceToday(zone);
         BigDecimal minPrice = priceService.getMinPriceToday(zone);
         BigDecimal maxPrice = priceService.getMaxPriceToday(zone);
+        List<PriceData> cheapestHours = priceService.getCheapestHoursToday(zone, 3);
 
         for (User user : users) {
             if (hasReceivedAlertToday(user.getId(), AlertType.DAILY_SUMMARY)) {
@@ -291,13 +252,14 @@ public class AlertService {
             String message = generateDailySummaryMessage(zone, avgPrice, minPrice, maxPrice);
             createAlert(user, AlertType.DAILY_SUMMARY, message);
 
-            logger.info("Daglig sammendrag sendt til {}", user.getEmail());
+            // ✅ Send e-post med daglig sammendrag
+            emailService.sendDailySummary(user.getEmail(), zone.toString(),
+                    avgPrice, minPrice, maxPrice, cheapestHours);
+
+            logger.info("✉️ Daglig sammendrag sendt til {}", user.getEmail());
         }
     }
 
-    /**
-     * Generer melding for daglig sammendrag
-     */
     private String generateDailySummaryMessage(no.strompris.model.PriceZone zone,
                                                BigDecimal avgPrice,
                                                BigDecimal minPrice,
@@ -318,33 +280,21 @@ public class AlertService {
     // HJELPEMETODER
     // ============================================
 
-    /**
-     * Sjekk om bruker har fått et varsel av en gitt type i dag
-     */
     public boolean hasReceivedAlertToday(Long userId, AlertType alertType) {
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         return alertRepository.hasReceivedAlertToday(userId, alertType, startOfDay);
     }
 
-    /**
-     * Hent alle varsler for en bruker
-     */
     public List<Alert> getAlertsForUser(Long userId) {
         return alertRepository.findByUserIdOrderByTriggeredAtDesc(userId);
     }
 
-    /**
-     * Hent dagens varsler for en bruker
-     */
     public List<Alert> getTodaysAlertsForUser(Long userId) {
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDate.now().atTime(LocalTime.MAX);
         return alertRepository.findTodaysAlertsForUser(userId, startOfDay, endOfDay);
     }
 
-    /**
-     * Slett gamle varsler (eldre enn 90 dager)
-     */
     public void deleteOldAlerts() {
         logger.info("Sletter varsler eldre enn 90 dager");
         LocalDateTime cutoffDate = LocalDateTime.now().minusDays(90);

@@ -3,6 +3,8 @@ import { priceApi } from '../services/api';
 import CurrentPrice from '../components/CurrentPrice';
 import PriceChart from '../components/PriceChart';
 import CheapestHours from '../components/CheapestHours';
+import SmartScheduler from '../components/SmartScheduler';
+import SavingsCalculator from '../components/SavingsCalculator';
 import UserForm from '../components/UserForm';
 import './HomePage.css';
 
@@ -85,28 +87,6 @@ const HomePage = ({ selectedZone }) => {
     fetchAllData();
   };
 
-  // I HomePage.jsx
-const requestNotificationPermission = async () => {
-  if ('Notification' in window && Notification.permission === 'default') {
-    await Notification.requestPermission();
-  }
-};
-
-const sendNotification = (title, body) => {
-  if (Notification.permission === 'granted') {
-    new Notification(title, { 
-      body, 
-      icon: '/logo192.png',
-      badge: '/logo192.png'
-    });
-  }
-};
-
-// Når pris går under terskel:
-if (currentPrice < threshold) {
-  sendNotification('Billig strøm!', `Kun ${currentPrice} kr/kWh nå!`);
-}
-
   return (
     <div className="home-page">
       <div className="container">
@@ -133,6 +113,10 @@ if (currentPrice < threshold) {
           loading={loading.cheapest}
           error={error.cheapest}
         />
+
+        <SmartScheduler todaysPrices={todaysPrices} />
+
+        <SavingsCalculator todaysPrices={todaysPrices} />
 
         <UserForm selectedZone={selectedZone} />
       </div>

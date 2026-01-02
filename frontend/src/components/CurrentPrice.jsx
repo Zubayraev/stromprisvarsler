@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './CurrentPrice.css';
 
 const CurrentPrice = ({ priceData, loading, error }) => {
+  const [prevPrice, setPrevPrice] = useState(null);
+  const [priceChange, setPriceChange] = useState(null);
+
+  useEffect(() => {
+    if (priceData && priceData.priceNok !== prevPrice) {
+      if (prevPrice !== null) {
+        setPriceChange(priceData.priceNok - prevPrice);
+      }
+      setPrevPrice(priceData.priceNok);
+    }
+  }, [priceData, prevPrice]);
+
   if (loading) {
     return (
       <div className="current-price loading">
@@ -47,25 +59,25 @@ const CurrentPrice = ({ priceData, loading, error }) => {
     minute: '2-digit',
   });
 
-  const [priceChange, setPriceChange] = useState(null);
-
-// Vis endring fra i går
-<div className={`price-change ${priceChange > 0 ? 'increase' : 'decrease'}`}>
-  {priceChange > 0 ? '📈' : '📉'} {Math.abs(priceChange).toFixed(2)} kr 
-  fra i går
-</div>
-
   return (
-    <div className={`current-price ${priceLevel}`}>
+    <div className={`current-price glass-card ${priceLevel}`}>
       <div className="price-header">
-        <span className="emoji">{emoji}</span>
+        <span className="emoji bounce">{emoji}</span>
         <h2>Strømpris nå</h2>
       </div>
       
       <div className="price-display">
-        <span className="price-value">{price.toFixed(2)}</span>
+        <span className={`price-value ${priceChange !== null ? 'updated' : ''}`}>
+          {price.toFixed(2)}
+        </span>
         <span className="price-unit">kr/kWh</span>
       </div>
+
+      {priceChange !== null && priceChange !== 0 && (
+        <div className={`price-change ${priceChange > 0 ? 'increase' : 'decrease'}`}>
+          {priceChange > 0 ? '📈' : '📉'} {Math.abs(priceChange).toFixed(2)} kr fra forrige time
+        </div>
+      )}
 
       <div className="price-info">
         <p className="time">Klokken {timeString}</p>

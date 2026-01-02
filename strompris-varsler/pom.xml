@@ -40,6 +40,12 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- ✅ Spring Boot Mail (E-post) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <!-- Lombok (reduce boilerplate code) -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -55,7 +61,7 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- Jackson for JSON parsing (already included in spring-boot-starter-web, but explicit is fine) -->
+        <!-- Jackson for JSON parsing -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>

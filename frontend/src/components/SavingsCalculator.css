@@ -1,0 +1,248 @@
+.savings-calculator {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  margin: 30px 0;
+  animation: fadeIn 0.6s ease-in 0.4s both;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.savings-calculator:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.section-header {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.section-header h3 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.calculator-content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input-section label {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.appliance-select,
+.kwh-input {
+  padding: 12px 16px;
+  border: 2px solid rgba(33, 150, 243, 0.2);
+  border-radius: 10px;
+  font-size: 16px;
+  background: white;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.appliance-select:focus,
+.kwh-input:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+
+.custom-input {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.results-section {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.price-comparison {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.price-box {
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.price-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.price-box.best {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.price-box.average {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+}
+
+.price-box.worst {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+.box-label {
+  font-size: 13px;
+  opacity: 0.9;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.box-value {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.savings-highlight {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 25px;
+  border-radius: 15px;
+  color: white;
+  text-align: center;
+}
+
+.savings-main {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.savings-label {
+  font-size: 14px;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.savings-amount {
+  font-size: 48px;
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.savings-extra {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.savings-label-small {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.savings-amount-small {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.projections {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.projection {
+  background: rgba(33, 150, 243, 0.05);
+  padding: 15px;
+  border-radius: 10px;
+  border: 2px solid rgba(33, 150, 243, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.projection-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.projection-value {
+  font-size: 22px;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.projection-value.highlight {
+  color: var(--accent-blue);
+}
+
+.tip-box {
+  background: rgba(33, 150, 243, 0.05);
+  border-left: 3px solid var(--accent-blue);
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.tip-box p {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .price-comparison {
+    grid-template-columns: 1fr;
+  }
+
+  .projections {
+    grid-template-columns: 1fr;
+  }
+
+  .savings-amount {
+    font-size: 36px;
+  }
+
+  .savings-calculator {
+    padding: 20px;
+  }
+}

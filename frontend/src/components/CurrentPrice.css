@@ -1,18 +1,19 @@
 .current-price {
-  background: white;
-  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
   padding: 48px 40px;
   text-align: center;
-  box-shadow: 0 4px 16px rgba(10, 25, 41, 0.08);
-  border: 1px solid rgba(33, 150, 243, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   margin: 32px 0;
   transition: all 0.3s ease;
+  animation: fadeIn 0.6s ease-in;
 }
 
 .current-price:hover {
-  box-shadow: 0 8px 24px rgba(10, 25, 41, 0.12);
-  transform: translateY(-3px);
-  border-color: rgba(33, 150, 243, 0.25);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
 }
 
 .current-price.loading,
@@ -37,6 +38,44 @@
   100% { transform: rotate(360deg); }
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% { 
+    transform: translateY(0); 
+  }
+  50% { 
+    transform: translateY(-10px); 
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    transform: scale(1); 
+  }
+  50% { 
+    transform: scale(1.08); 
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(102, 126, 234, 0);
+  }
+}
+
 .price-header {
   display: flex;
   align-items: center;
@@ -47,6 +86,10 @@
 
 .price-header .emoji {
   font-size: 32px;
+}
+
+.price-header .emoji.bounce {
+  animation: bounce 2s ease-in-out infinite;
 }
 
 .price-header h2 {
@@ -70,6 +113,11 @@
   font-weight: 700;
   line-height: 1;
   letter-spacing: -2px;
+  transition: all 0.3s ease;
+}
+
+.price-value.updated {
+  animation: pulse 0.5s ease-in-out;
 }
 
 .price-unit {
@@ -78,17 +126,51 @@
   font-weight: 500;
 }
 
-/* Price level colors */
+/* Price level colors with glow */
 .current-price.low .price-value {
   color: var(--success);
+}
+
+.current-price.low {
+  border-color: rgba(16, 185, 129, 0.3);
 }
 
 .current-price.medium .price-value {
   color: var(--accent-blue);
 }
 
+.current-price.medium {
+  border-color: rgba(33, 150, 243, 0.3);
+}
+
 .current-price.high .price-value {
   color: var(--danger);
+}
+
+.current-price.high {
+  border-color: rgba(239, 68, 68, 0.3);
+  animation: pulse-glow 2s infinite;
+}
+
+.price-change {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 16px;
+  margin-top: 10px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.price-change.increase {
+  color: #e74c3c;
+  background: rgba(231, 76, 60, 0.1);
+}
+
+.price-change.decrease {
+  color: #27ae60;
+  background: rgba(39, 174, 96, 0.1);
 }
 
 .price-info {
@@ -135,30 +217,4 @@
   .price-header h2 {
     font-size: 18px;
   }
-
-  /* I CurrentPrice.css */
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-.price-value.updated {
-  animation: pulse 0.5s ease-in-out;
-}
-
-.price-change {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 18px;
-  margin-top: 10px;
-}
-
-.price-change.increase {
-  color: #e74c3c;
-}
-
-.price-change.decrease {
-  color: #27ae60;
-}
 }

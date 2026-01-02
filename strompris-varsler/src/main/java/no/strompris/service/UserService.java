@@ -21,6 +21,7 @@ import java.util.Optional;
  * - Oppdatering av preferanser
  * - Finne brukere som skal varsles
  */
+
 @Service
 @Transactional
 public class UserService {
@@ -44,22 +45,27 @@ public class UserService {
      * @return Lagret bruker
      * @throws IllegalArgumentException hvis e-post allerede eksisterer
      */
+    // I UserService.java, oppdater registerUser metoden:
+
+    @Autowired
+    private EmailService emailService;
+
     public User registerUser(User user) {
         logger.info("Registrerer ny bruker: {}", user.getEmail());
 
-        // Valider e-post
         if (!user.hasValidEmail()) {
             throw new IllegalArgumentException("Ugyldig e-postadresse: " + user.getEmail());
         }
 
-        // Sjekk om e-post allerede eksisterer
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("E-post allerede registrert: " + user.getEmail());
         }
 
-        // Lagre bruker
         User savedUser = userRepository.save(user);
         logger.info("Bruker registrert med ID: {}", savedUser.getId());
+
+        // ✅ Send velkomst e-post
+        emailService.sendWelcomeEmail(savedUser.getEmail(), savedUser.getPriceZone().toString());
 
         return savedUser;
     }
