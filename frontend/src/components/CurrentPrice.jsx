@@ -47,6 +47,14 @@ const CurrentPrice = ({ priceData, loading, error }) => {
     minute: '2-digit',
   });
 
+  const [priceChange, setPriceChange] = useState(null);
+
+// Vis endring fra i går
+<div className={`price-change ${priceChange > 0 ? 'increase' : 'decrease'}`}>
+  {priceChange > 0 ? '📈' : '📉'} {Math.abs(priceChange).toFixed(2)} kr 
+  fra i går
+</div>
+
   return (
     <div className={`current-price ${priceLevel}`}>
       <div className="price-header">

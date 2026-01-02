@@ -85,6 +85,28 @@ const HomePage = ({ selectedZone }) => {
     fetchAllData();
   };
 
+  // I HomePage.jsx
+const requestNotificationPermission = async () => {
+  if ('Notification' in window && Notification.permission === 'default') {
+    await Notification.requestPermission();
+  }
+};
+
+const sendNotification = (title, body) => {
+  if (Notification.permission === 'granted') {
+    new Notification(title, { 
+      body, 
+      icon: '/logo192.png',
+      badge: '/logo192.png'
+    });
+  }
+};
+
+// Når pris går under terskel:
+if (currentPrice < threshold) {
+  sendNotification('Billig strøm!', `Kun ${currentPrice} kr/kWh nå!`);
+}
+
   return (
     <div className="home-page">
       <div className="container">

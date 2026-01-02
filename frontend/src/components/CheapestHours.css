@@ -1,87 +1,100 @@
 .cheapest-hours {
   background: white;
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  margin: 30px 0;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 16px rgba(10, 25, 41, 0.08);
+  border: 1px solid rgba(33, 150, 243, 0.15);
+  margin: 32px 0;
+  transition: all 0.3s ease;
+}
+
+.cheapest-hours:hover {
+  box-shadow: 0 8px 24px rgba(10, 25, 41, 0.12);
+  transform: translateY(-2px);
 }
 
 .cheapest-hours.loading,
 .cheapest-hours.error,
 .cheapest-hours.no-data {
-  padding: 60px;
+  padding: 64px;
   text-align: center;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .section-header {
-  margin-bottom: 30px;
+  margin-bottom: 32px;
   text-align: center;
 }
 
 .section-header h3 {
-  margin: 0 0 10px 0;
-  font-size: 24px;
-  color: #333;
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  color: var(--text-primary);
   font-weight: 600;
+  letter-spacing: -0.3px;
 }
 
 .subtitle {
   margin: 0;
-  color: #666;
-  font-size: 16px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .hours-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
-  margin: 30px 0;
+  margin: 32px 0;
 }
 
 .hour-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 15px;
-  padding: 30px;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
+  border-radius: 12px;
+  padding: 32px;
   text-align: center;
   color: white;
   position: relative;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease;
   cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 16px rgba(10, 25, 41, 0.15);
 }
 
 .hour-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(10, 25, 41, 0.25);
 }
 
 .hour-card:nth-child(1) {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, #2196f3 0%, #1565c0 100%);
 }
 
 .hour-card:nth-child(2) {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  background: linear-gradient(135deg, #42a5f5 0%, #1976d2 100%);
 }
 
 .hour-card:nth-child(3) {
-  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  background: linear-gradient(135deg, #64b5f6 0%, #1e88e5 100%);
 }
 
 .card-rank {
   position: absolute;
-  top: 15px;
-  right: 15px;
-  background: rgba(255, 255, 255, 0.3);
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 14px;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.25);
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 13px;
   font-weight: 700;
+  backdrop-filter: blur(10px);
 }
 
 .card-time {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
+  letter-spacing: -0.3px;
 }
 
 .card-price {
@@ -89,54 +102,64 @@
 }
 
 .card-price .price-value {
-  font-size: 42px;
+  font-size: 40px;
   font-weight: 700;
   line-height: 1;
+  letter-spacing: -1px;
 }
 
 .card-price .price-unit {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
-  margin-left: 5px;
-  opacity: 0.9;
+  margin-left: 4px;
+  opacity: 0.85;
 }
 
 .card-emoji {
-  font-size: 40px;
-  margin-top: 15px;
+  font-size: 32px;
+  margin-top: 12px;
 }
 
 .tip-box {
-  background: #f8f9fa;
-  border-left: 4px solid #3498db;
+  background: rgba(33, 150, 243, 0.05);
+  border-left: 3px solid var(--accent-blue);
   padding: 20px;
-  border-radius: 10px;
-  margin-top: 30px;
+  border-radius: 8px;
+  margin-top: 32px;
 }
 
 .tip-box p {
   margin: 0;
-  color: #333;
-  font-size: 16px;
+  color: var(--text-primary);
+  font-size: 14px;
   line-height: 1.6;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .cheapest-hours {
-    padding: 20px;
+    padding: 24px 16px;
   }
 
   .hours-grid {
     grid-template-columns: 1fr;
-    gap: 15px;
+    gap: 16px;
   }
 
   .hour-card {
-    padding: 25px;
+    padding: 28px;
   }
 
   .card-price .price-value {
     font-size: 36px;
   }
+  .cheapest-hours {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  margin: 30px 0;
+  animation: fadeIn 0.6s ease-in 0.3s both;
+}
 }

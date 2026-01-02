@@ -1,32 +1,35 @@
 .current-price {
   background: white;
-  border-radius: 20px;
-  padding: 40px;
+  border-radius: 16px;
+  padding: 48px 40px;
   text-align: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  margin: 30px 0;
-  transition: transform 0.3s ease;
+  box-shadow: 0 4px 16px rgba(10, 25, 41, 0.08);
+  border: 1px solid rgba(33, 150, 243, 0.15);
+  margin: 32px 0;
+  transition: all 0.3s ease;
 }
 
 .current-price:hover {
-  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(10, 25, 41, 0.12);
+  transform: translateY(-3px);
+  border-color: rgba(33, 150, 243, 0.25);
 }
 
 .current-price.loading,
 .current-price.error,
 .current-price.no-data {
-  padding: 60px;
-  color: #666;
+  padding: 64px;
+  color: var(--text-secondary);
 }
 
 .spinner {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #3498db;
+  border: 3px solid rgba(33, 150, 243, 0.1);
+  border-top: 3px solid var(--accent-blue);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 20px;
+  width: 36px;
+  height: 36px;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
 }
 
 @keyframes spin {
@@ -38,97 +41,124 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
-  margin-bottom: 20px;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
 .price-header .emoji {
-  font-size: 40px;
+  font-size: 32px;
 }
 
 .price-header h2 {
   margin: 0;
-  color: #333;
-  font-size: 24px;
+  color: var(--text-primary);
+  font-size: 20px;
   font-weight: 600;
+  letter-spacing: -0.3px;
 }
 
 .price-display {
-  margin: 30px 0;
+  margin: 32px 0;
   display: flex;
   align-items: baseline;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .price-value {
-  font-size: 80px;
-  font-weight: bold;
+  font-size: 72px;
+  font-weight: 700;
   line-height: 1;
+  letter-spacing: -2px;
 }
 
 .price-unit {
-  font-size: 24px;
-  color: #666;
+  font-size: 20px;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
 /* Price level colors */
 .current-price.low .price-value {
-  color: #27ae60;
+  color: var(--success);
 }
 
 .current-price.medium .price-value {
-  color: #f39c12;
+  color: var(--accent-blue);
 }
 
 .current-price.high .price-value {
-  color: #e74c3c;
+  color: var(--danger);
 }
 
 .price-info {
-  margin: 20px 0;
-  color: #666;
+  margin: 24px 0;
+  color: var(--text-secondary);
 }
 
 .price-info p {
-  margin: 5px 0;
-  font-size: 16px;
+  margin: 4px 0;
+  font-size: 14px;
 }
 
 .zone {
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .price-status {
-  margin-top: 25px;
-  padding-top: 25px;
-  border-top: 2px solid #f0f0f0;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(33, 150, 243, 0.1);
 }
 
 .status-text {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   margin: 0;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .current-price {
-    padding: 30px 20px;
-    margin: 20px 0;
+    padding: 32px 24px;
+    margin: 24px 0;
   }
 
   .price-value {
-    font-size: 60px;
+    font-size: 56px;
   }
 
   .price-unit {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .price-header h2 {
-    font-size: 20px;
+    font-size: 18px;
   }
+
+  /* I CurrentPrice.css */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.price-value.updated {
+  animation: pulse 0.5s ease-in-out;
+}
+
+.price-change {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.price-change.increase {
+  color: #e74c3c;
+}
+
+.price-change.decrease {
+  color: #27ae60;
+}
 }

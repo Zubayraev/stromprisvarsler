@@ -1,12 +1,35 @@
 .home-page {
   min-height: 100vh;
-  background: linear-gradient(to bottom, #f5f7fa 0%, #c3cfe2 100%);
+  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+  position: relative;
+}
+
+/* Legg til subtle animert bakgrunn */
+.home-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+  animation: backgroundShift 15s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes backgroundShift {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 .refresh-section {
@@ -17,22 +40,27 @@
 
 .refresh-btn {
   padding: 12px 24px;
-  background: white;
-  border: 2px solid #667eea;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(102, 126, 234, 0.5);
   color: #667eea;
   border-radius: 10px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
 }
 
 .refresh-btn:hover {
   background: #667eea;
   color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  transform: translateY(-2px) rotate(180deg);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.refresh-btn:active {
+  transform: translateY(0) rotate(180deg);
 }
 
 /* Responsive */
